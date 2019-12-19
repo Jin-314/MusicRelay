@@ -38,7 +38,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.StartButton = new System.Windows.Forms.Button();
             this.StopButton = new System.Windows.Forms.Button();
             this.NextButton = new System.Windows.Forms.Button();
@@ -48,7 +48,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -56,15 +56,15 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.button15 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -159,17 +159,17 @@
             this.label3.Size = new System.Drawing.Size(687, 1);
             this.label3.TabIndex = 8;
             // 
-            // label5
+            // label15
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label5.Location = new System.Drawing.Point(107, 106);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(467, 32);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "再生リスト";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label15.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label15.Location = new System.Drawing.Point(107, 106);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(467, 32);
+            this.label15.TabIndex = 10;
+            this.label15.Text = "再生リスト";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // StartButton
             // 
@@ -252,7 +252,7 @@
             this.button3.TabIndex = 8;
             this.button3.Text = "曲を開く";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            this.button3.Click += new System.EventHandler(this.button_Clicked);
             // 
             // label4
             // 
@@ -275,7 +275,7 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "曲を開く";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.button_Clicked);
             // 
             // tableLayoutPanel2
             // 
@@ -284,7 +284,7 @@
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.label14, 0, 9);
+            this.tableLayoutPanel2.Controls.Add(this.label13, 0, 9);
             this.tableLayoutPanel2.Controls.Add(this.button2, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.button3, 1, 1);
@@ -295,15 +295,15 @@
             this.tableLayoutPanel2.Controls.Add(this.button8, 1, 6);
             this.tableLayoutPanel2.Controls.Add(this.button9, 1, 7);
             this.tableLayoutPanel2.Controls.Add(this.button10, 1, 8);
-            this.tableLayoutPanel2.Controls.Add(this.button15, 1, 9);
-            this.tableLayoutPanel2.Controls.Add(this.label6, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label7, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.button11, 1, 9);
+            this.tableLayoutPanel2.Controls.Add(this.label5, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.label8, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.label9, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.label10, 0, 5);
-            this.tableLayoutPanel2.Controls.Add(this.label11, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.label12, 0, 7);
-            this.tableLayoutPanel2.Controls.Add(this.label13, 0, 8);
+            this.tableLayoutPanel2.Controls.Add(this.label7, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.label9, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.label10, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.label11, 0, 7);
+            this.tableLayoutPanel2.Controls.Add(this.label12, 0, 8);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 159);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 10;
@@ -321,16 +321,16 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(677, 566);
             this.tableLayoutPanel2.TabIndex = 16;
             // 
-            // label14
+            // label13
             // 
-            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label14.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label14.Location = new System.Drawing.Point(3, 504);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(332, 62);
-            this.label14.TabIndex = 25;
-            this.label14.Text = "FileName";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label13.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label13.Location = new System.Drawing.Point(3, 504);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(332, 62);
+            this.label13.TabIndex = 25;
+            this.label13.Text = "FileName";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button4
             // 
@@ -341,7 +341,7 @@
             this.button4.TabIndex = 9;
             this.button4.Text = "曲を開く";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            this.button4.Click += new System.EventHandler(this.button_Clicked);
             // 
             // button5
             // 
@@ -352,7 +352,7 @@
             this.button5.TabIndex = 10;
             this.button5.Text = "曲を開く";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.Button5_Click);
+            this.button5.Click += new System.EventHandler(this.button_Clicked);
             // 
             // button6
             // 
@@ -363,7 +363,7 @@
             this.button6.TabIndex = 11;
             this.button6.Text = "曲を開く";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.Button6_Click);
+            this.button6.Click += new System.EventHandler(this.button_Clicked);
             // 
             // button7
             // 
@@ -374,7 +374,7 @@
             this.button7.TabIndex = 12;
             this.button7.Text = "曲を開く";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.Button7_Click);
+            this.button7.Click += new System.EventHandler(this.button_Clicked);
             // 
             // button8
             // 
@@ -385,7 +385,7 @@
             this.button8.TabIndex = 13;
             this.button8.Text = "曲を開く";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.Button8_Click);
+            this.button8.Click += new System.EventHandler(this.button_Clicked);
             // 
             // button9
             // 
@@ -396,7 +396,7 @@
             this.button9.TabIndex = 14;
             this.button9.Text = "曲を開く";
             this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.Button9_Click);
+            this.button9.Click += new System.EventHandler(this.button_Clicked);
             // 
             // button10
             // 
@@ -407,40 +407,40 @@
             this.button10.TabIndex = 15;
             this.button10.Text = "曲を開く";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.Button10_Click);
+            this.button10.Click += new System.EventHandler(this.button_Clicked);
             // 
-            // button15
+            // button11
             // 
-            this.button15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button15.Location = new System.Drawing.Point(341, 507);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(333, 56);
-            this.button15.TabIndex = 16;
-            this.button15.Text = "曲を開く";
-            this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.Button15_Click);
+            this.button11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button11.Location = new System.Drawing.Point(341, 507);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(333, 56);
+            this.button11.TabIndex = 16;
+            this.button11.Text = "曲を開く";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button_Clicked);
+            // 
+            // label5
+            // 
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label5.Location = new System.Drawing.Point(3, 56);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(332, 56);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "FileName";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label6
             // 
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label6.Location = new System.Drawing.Point(3, 56);
+            this.label6.Location = new System.Drawing.Point(3, 112);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(332, 56);
-            this.label6.TabIndex = 17;
+            this.label6.TabIndex = 18;
             this.label6.Text = "FileName";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label7
-            // 
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label7.Location = new System.Drawing.Point(3, 112);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(332, 56);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "FileName";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label8
             // 
@@ -453,14 +453,25 @@
             this.label8.Text = "FileName";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label7
+            // 
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label7.Location = new System.Drawing.Point(3, 168);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(332, 56);
+            this.label7.TabIndex = 20;
+            this.label7.Text = "FileName";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // label9
             // 
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label9.Location = new System.Drawing.Point(3, 168);
+            this.label9.Location = new System.Drawing.Point(3, 280);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(332, 56);
-            this.label9.TabIndex = 20;
+            this.label9.TabIndex = 21;
             this.label9.Text = "FileName";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -468,10 +479,10 @@
             // 
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label10.Location = new System.Drawing.Point(3, 280);
+            this.label10.Location = new System.Drawing.Point(3, 336);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(332, 56);
-            this.label10.TabIndex = 21;
+            this.label10.TabIndex = 22;
             this.label10.Text = "FileName";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -479,10 +490,10 @@
             // 
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label11.Location = new System.Drawing.Point(3, 336);
+            this.label11.Location = new System.Drawing.Point(3, 392);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(332, 56);
-            this.label11.TabIndex = 22;
+            this.label11.TabIndex = 23;
             this.label11.Text = "FileName";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -490,23 +501,12 @@
             // 
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label12.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label12.Location = new System.Drawing.Point(3, 392);
+            this.label12.Location = new System.Drawing.Point(3, 448);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(332, 56);
-            this.label12.TabIndex = 23;
+            this.label12.TabIndex = 24;
             this.label12.Text = "FileName";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label13
-            // 
-            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label13.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label13.Location = new System.Drawing.Point(3, 448);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(332, 56);
-            this.label13.TabIndex = 24;
-            this.label13.Text = "FileName";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
@@ -514,7 +514,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(693, 833);
             this.Controls.Add(this.tableLayoutPanel2);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -543,7 +543,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.Button NextButton;
@@ -553,7 +553,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
@@ -561,15 +561,15 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
         private System.IO.Ports.SerialPort serialPort2;
     }
 }

@@ -21,6 +21,8 @@ namespace MusicRelay
         }
 
         private string tmp = "";
+        private Button[] buttonArray;
+        private Label[] labelArray;
         private List<string>parts = new List<string>();
         private List<string>ompu = new List<string>();
         private List<int> part1 = new List<int>();
@@ -63,12 +65,38 @@ namespace MusicRelay
                 }                
             }
         }
+        public object GetControlArrayByName(Form frm, string name)
+        {
+            System.Collections.ArrayList ctrs =
+                new System.Collections.ArrayList();
+            object obj;
+            for (int i = 1;
+                (obj = FindControlByFieldName(frm, name + i.ToString())) != null; i++)
+                ctrs.Add(obj);
+            if (ctrs.Count == 0)
+                return null;
+            else
+                return ctrs.ToArray(ctrs[0].GetType());
+        }
+        public static object FindControlByFieldName(Form frm, string name)
+        {
+            System.Type t = frm.GetType();
+            System.Reflection.FieldInfo fi = t.GetField(name, System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.DeclaredOnly);
+            if (fi == null)
+                return null;
+            return fi.GetValue(frm);
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             this.AutoScroll = true;
             this.AutoScrollMargin = new Size(10, 10);
             this.AutoScrollMinSize = new Size(100, 100);
             this.AutoScrollPosition = new Point(-50, 50);
+            buttonArray = (Button[])GetControlArrayByName(this, "button");
+            labelArray = (Label[])GetControlArrayByName(this, "label");
 
             string[] PortList = SerialPort.GetPortNames();
 
@@ -88,207 +116,42 @@ namespace MusicRelay
             NextButton.Enabled = false;
             ReturnButton.Enabled = false;
         }
-        private void button2_Click(object sender, EventArgs e)
-        {
 
-            if (button2.Enabled)
-            {
-
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label4.Text = openFileDialog1.FileName;
-                    if(files.Count > 0)
-                    {
-                        files.RemoveAt(0);
-                        files.Insert(0, label4.Text);
-                    }
-                    else
-                    {
-                        files.Add(label4.Text);
-                    }
-                    StartButton.Enabled = true;
-                    button3.Enabled = true;
-                    NextButton.Enabled = true;
-                    ReturnButton.Enabled = true;
-                }
-            }
-            
-        }
-        private void Button3_Click(object sender, EventArgs e)
+        private void button_Clicked(object sender, EventArgs e)
         {
-            if (button3.Enabled)
+            if (this.Enabled)
             {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                int index = -1;
+                for(int i = 0; i < buttonArray.Length; i++)
                 {
-                    label6.Text = openFileDialog1.FileName;
-                    if (files.Count > 1)
+                    if (buttonArray[i].Equals(sender))
                     {
-                        files.RemoveAt(1);
-                        files.Insert(1, label6.Text);
+                        index = i;
+                        break;
                     }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button4.Enabled = true;
                 }
-            }
-        }
-        private void Button4_Click(object sender, EventArgs e)
-        {
-            if (button4.Enabled)
-            {
                 if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    label7.Text = openFileDialog1.FileName;
-                    if (files.Count > 2)
+                    string filePath = openFileDialog1.FileName;
+                    labelArray[index + 2].Text = Path.GetFileNameWithoutExtension(filePath);
+                    if(index > -1)
                     {
-                        files.RemoveAt(2);
-                        files.Insert(2, label7.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button5.Enabled = true;
-                }
-            }
-        }
-        private void Button5_Click(object sender, EventArgs e)
-        {
-            if (button5.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label9.Text = openFileDialog1.FileName;
-                    if (files.Count > 3)
-                    {
-                        files.RemoveAt(3);
-                        files.Insert(3, label9.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button6.Enabled = true;
-                }
-            }
-        }
-        private void Button6_Click(object sender, EventArgs e)
-        {
-            if (button6.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label8.Text = openFileDialog1.FileName;
-                    if (files.Count > 4)
-                    {
-                        files.RemoveAt(4);
-                        files.Insert(4, label8.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button7.Enabled = true;
-                }
-            }
-        }
-        private void Button7_Click(object sender, EventArgs e)
-        {
-            if (button7.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label10.Text = openFileDialog1.FileName;
-                    if (files.Count > 5)
-                    {
-                        files.RemoveAt(5);
-                        files.Insert(5, label10.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button8.Enabled = true;
-                }
-            }
-        }
-        private void Button8_Click(object sender, EventArgs e)
-        {
-            if (button8.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label11.Text = openFileDialog1.FileName;
-                    if (files.Count > 6)
-                    {
-                        files.RemoveAt(6);
-                        files.Insert(6, label11.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button9.Enabled = true;
-                }
-            }
-        }
-        private void Button9_Click(object sender, EventArgs e)
-        {
-            if (button9.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label12.Text = openFileDialog1.FileName;
-                    if (files.Count > 7)
-                    {
-                        files.RemoveAt(7);
-                        files.Insert(7, label12.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button10.Enabled = true;
-                }
-            }
-        }
-        private void Button10_Click(object sender, EventArgs e)
-        {
-            if (button10.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label13.Text = openFileDialog1.FileName;
-                    if (files.Count > 8)
-                    {
-                        files.RemoveAt(8);
-                        files.Insert(8, label13.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
-                    }
-                    button15.Enabled = true;
-                }
-            }
-        }
-        private void Button15_Click(object sender, EventArgs e)
-        {
-            if (button15.Enabled)
-            {
-                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    label14.Text = openFileDialog1.FileName;
-                    if (files.Count > 9)
-                    {
-                        files.RemoveAt(9);
-                        files.Insert(9, label14.Text);
-                    }
-                    else
-                    {
-                        files.Add(openFileDialog1.FileName);
+                        if (files.Count > index - 1)
+                        {
+                            files.RemoveAt(index - 1);
+                            files.Insert(index - 1, filePath);
+                        }
+                        else
+                        {
+                            files.Add(filePath);
+                        }
+                        if(index < 10)
+                        {
+                            StartButton.Enabled = true;
+                            buttonArray[index + 1].Enabled = true;
+                            NextButton.Enabled = true;
+                            ReturnButton.Enabled = true;
+                        }
                     }
                 }
             }
@@ -375,7 +238,7 @@ namespace MusicRelay
         }
         private void SerialStart()
         {
-            serialPort1.BaudRate = 500000;
+            serialPort1.BaudRate = 115200;
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.Open();
         }
@@ -757,21 +620,21 @@ namespace MusicRelay
             button8.Enabled = false;
             button9.Enabled = false;
             button10.Enabled = false;
-            button15.Enabled = false;
+            button11.Enabled = false;
             StartButton.Enabled = false;
             StopButton.Enabled = false;
             NextButton.Enabled = false;
             ReturnButton.Enabled = false;
             label4.Text = "FileName";
+            label5.Text = "FileName";
             label6.Text = "FileName";
-            label7.Text = "FileName";
             label8.Text = "FileName";
+            label7.Text = "FileName";
             label9.Text = "FileName";
             label10.Text = "FileName";
             label11.Text = "FileName";
             label12.Text = "FileName";
             label13.Text = "FileName";
-            label14.Text = "FileName";
         }
         private void buttonClear()
         {
@@ -784,7 +647,7 @@ namespace MusicRelay
             button8.Enabled = false;
             button9.Enabled = false;
             button10.Enabled = false;
-            button15.Enabled = false;
+            button11.Enabled = false;
         }
         private void buttonEnable()
         {
@@ -800,7 +663,7 @@ namespace MusicRelay
                     button8.Enabled = false;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 2:
                     button2.Enabled = true;
@@ -812,7 +675,7 @@ namespace MusicRelay
                     button8.Enabled = false;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 3:
                     button2.Enabled = true;
@@ -824,7 +687,7 @@ namespace MusicRelay
                     button8.Enabled = false;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 4:
                     button2.Enabled = true;
@@ -836,7 +699,7 @@ namespace MusicRelay
                     button8.Enabled = false;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 5:
                     button2.Enabled = true;
@@ -848,7 +711,7 @@ namespace MusicRelay
                     button8.Enabled = false;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 6:
                     button2.Enabled = true;
@@ -860,7 +723,7 @@ namespace MusicRelay
                     button8.Enabled = false;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 7:
                     button2.Enabled = true;
@@ -872,7 +735,7 @@ namespace MusicRelay
                     button8.Enabled = true;
                     button9.Enabled = false;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 8:
                     button2.Enabled = true;
@@ -884,7 +747,7 @@ namespace MusicRelay
                     button8.Enabled = true;
                     button9.Enabled = true;
                     button10.Enabled = false;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 9:
                     button2.Enabled = true;
@@ -896,7 +759,7 @@ namespace MusicRelay
                     button8.Enabled = true;
                     button9.Enabled = true;
                     button10.Enabled = true;
-                    button15.Enabled = false;
+                    button11.Enabled = false;
                     break;
                 case 10:
                     button2.Enabled = true;
@@ -908,7 +771,7 @@ namespace MusicRelay
                     button8.Enabled = true;
                     button9.Enabled = true;
                     button10.Enabled = true;
-                    button15.Enabled = true;
+                    button11.Enabled = true;
                     break;
             }
         }
@@ -928,54 +791,54 @@ namespace MusicRelay
                     break;
                 case 1:
                     label4.ForeColor = Color.Black;
-                    label6.ForeColor = Color.Red;
+                    label5.ForeColor = Color.Red;
                     break;
                 case 2:
+                    label5.ForeColor = Color.Black;
+                    label6.ForeColor = Color.Red;
+                    break;
+                case 3:
                     label6.ForeColor = Color.Black;
                     label7.ForeColor = Color.Red;
                     break;
-                case 3:
-                    label7.ForeColor = Color.Black;
-                    label9.ForeColor = Color.Red;
-                    break;
                 case 4:
-                    label9.ForeColor = Color.Black;
+                    label7.ForeColor = Color.Black;
                     label8.ForeColor = Color.Red;
                     break;
                 case 5:
                     label8.ForeColor = Color.Black;
-                    label10.ForeColor = Color.Red;
+                    label9.ForeColor = Color.Red;
                     break;
                 case 6:
+                    label9.ForeColor = Color.Black;
+                    label10.ForeColor = Color.Red;
+                    break;
+                case 7:
                     label10.ForeColor = Color.Black;
                     label11.ForeColor = Color.Red;
                     break;
-                case 7:
+                case 8:
                     label11.ForeColor = Color.Black;
                     label12.ForeColor = Color.Red;
                     break;
-                case 8:
+                case 9:
                     label12.ForeColor = Color.Black;
                     label13.ForeColor = Color.Red;
-                    break;
-                case 9:
-                    label13.ForeColor = Color.Black;
-                    label14.ForeColor = Color.Red;
                     break;
             }
         }
         private void labelResetColor()
         {
             label4.ForeColor = Color.Black;
+            label5.ForeColor = Color.Black;
             label6.ForeColor = Color.Black;
             label7.ForeColor = Color.Black;
-            label9.ForeColor = Color.Black;
             label8.ForeColor = Color.Black;
+            label9.ForeColor = Color.Black;
             label10.ForeColor = Color.Black;
             label11.ForeColor = Color.Black;
             label12.ForeColor = Color.Black;
             label13.ForeColor = Color.Black;
-            label14.ForeColor = Color.Black;
         }
     }
 }
