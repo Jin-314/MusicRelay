@@ -25,19 +25,9 @@ namespace MusicRelay
         private Label[] labelArray;
         private List<string>parts = new List<string>();
         private List<string>ompu = new List<string>();
-        private List<int> part1 = new List<int>();
-        private List<int> part2 = new List<int>();
-        private List<int> part3 = new List<int>();
-        private List<int> part4 = new List<int>();
-        private List<int> part5 = new List<int>();
-        private List<int> part6 = new List<int>();
-        private List<int> part7 = new List<int>();
-        private List<int> part8 = new List<int>();
-        private List<int> part9 = new List<int>();
-        private List<int> part10 = new List<int>();
+        private List<List<int>> Data = new List<List<int>>();
         private int partsNum = 0;
         private int counter = 0;
-        private int counter2 = 0;
         private uint delay = 0;
         private List<string> files = new List<string>();
         private bool serial_end = false;
@@ -110,7 +100,7 @@ namespace MusicRelay
                 comboBox1.SelectedIndex = 0;
             }
             buttonClear();
-            counter2 = 0;
+            counter = 0;
             StartButton.Enabled = false;
             StopButton.Enabled = false;
             NextButton.Enabled = false;
@@ -167,24 +157,27 @@ namespace MusicRelay
                     buttonClear();
                     serial_end = false;
                     _s = new CancellationTokenSource();
-                    if(counter2 < 0)
+                    if(counter < 0)
                     {
-                        counter2 = 0;
-                    }else if(counter2 >= files.Count)
+                        counter = 0;
+                    }
+                    else if(counter >= files.Count)
                     {
                         labelResetColor();
-                        counter2 = 0;
+                        counter = 0;
                         ArrayClear();
                         buttonEnable();
                         StartButton.Enabled = true;
                         StopButton.Enabled = false;
                     }
-                    StreamReader sr = new StreamReader(files[counter2], Encoding.GetEncoding("SHIFT_JIS"));
-                    counter = 0;
-                    labelResetColor();
-                    labelSetColor();
-                    FileEncoder(sr);
-                    SerialDate(_s.Token);
+                    else
+                    {
+                        StreamReader sr = new StreamReader(files[counter], Encoding.GetEncoding("SHIFT_JIS"));
+                        labelResetColor();
+                        labelSetColor();
+                        FileEncoder(sr);
+                        SerialDate(_s.Token);
+                    }
                 }
                 catch(Exception ex)
                 {
@@ -204,7 +197,7 @@ namespace MusicRelay
                     labelResetColor();
                     StopButton.Enabled = false;
                     StartButton.Enabled = true;
-                    counter2 = 11;
+                    counter = 0;
                 }
                 catch(Exception ex)
                 {
@@ -219,7 +212,7 @@ namespace MusicRelay
                 ArrayClear();
                 TaskCancel();
                 StartButton.Enabled = true;
-                counter2++;
+                counter++;
                 Thread.Sleep(500);
                 StartButton.PerformClick();
             }
@@ -231,7 +224,7 @@ namespace MusicRelay
                 TaskCancel();
                 ArrayClear();
                 StartButton.Enabled = true;
-                counter2--;
+                counter--;
                 Thread.Sleep(500);
                 StartButton.PerformClick();
             }
@@ -246,22 +239,35 @@ namespace MusicRelay
         {
             try
             {
-                string line = "";
+                string line;
                 List<string> list = new List<string>();
                 while ((line = sr.ReadLine()) != null)
                 {
                     list.Add(line);
                 }
-                tmp = list[0];
-                ompu.AddRange(list[1].Split('\t'));
                 partsNum = list.Count();
-                for (int i = 2; i < partsNum; i++)
+                int i = 0;
+                foreach (string row in list)
                 {
-                    parts.AddRange(list[i].Split('\t'));
-                    for (int j = 0; j < parts.Count; j++)
+                    List<int> buff = new List<int>();
+                    switch (i)
+                    {
+                        case 0:
+                            tmp = row;
+                            i++;
+                            continue;
+                        case 1:
+                            ompu.AddRange(row.Split('\t'));
+                            i++;
+                            continue;
+                        default:
+                            parts.AddRange(row.Split('\t'));
+                            break;
+                    }
+                    foreach (string str in parts)
                     {
                         int onkai = 0;
-                        switch (parts[j])
+                        switch (str)
                         {
                             case "0":
                                 onkai = 0;
@@ -429,41 +435,10 @@ namespace MusicRelay
                                 //MessageBox.Show("音符データが不正です。");
                                 break;
                         }
-                        switch (counter)
-                        {
-                            case 0:
-                                part1.Add(onkai);
-                                break;
-                            case 1:
-                                part2.Add(onkai);
-                                break;
-                            case 2:
-                                part3.Add(onkai);
-                                break;
-                            case 3:
-                                part4.Add(onkai);
-                                break;
-                            case 4:
-                                part5.Add(onkai);
-                                break;
-                            case 5:
-                                part6.Add(onkai);
-                                break;
-                            case 6:
-                                part7.Add(onkai);
-                                break;
-                            case 7:
-                                part8.Add(onkai);
-                                break;
-                            case 8:
-                                part9.Add(onkai);
-                                break;
-                            case 9:
-                                part10.Add(onkai);
-                                break;
-                        }
+                        buff.Add(onkai);
+                        i++;
                     }
-                    counter++;
+                    Data.Add(buff);
                     parts.Clear();
                 }
             }
@@ -481,9 +456,9 @@ namespace MusicRelay
             try
             {
                 int i = 0;
-                for (i = 0; i < ompu.Count; i++)
+                foreach (string str in ompu)
                 {
-                    int _ompu = int.Parse(ompu[i]);
+                    int _ompu = int.Parse(str);
                     String text = "";
                     switch (_ompu)
                     {
@@ -512,42 +487,12 @@ namespace MusicRelay
                             //MessageBox.Show("音符データが不正です。");
                             break;
                     }
-                    for (int k = 3; k <= partsNum; k++){
-                        switch (k)
-                        {
-                            case 3:
-                                text = partsNum.ToString() + "," + tmp + "," + ompu[i] + "," + part1[i].ToString();
-                                break;
-                            case 4:
-                                text += "," + part2[i].ToString();
-                                break;
-                            case 5:
-                                text += "," + part3[i].ToString();
-                                break;
-                            case 6:
-                                text += "," + part4[i].ToString();
-                                break;
-                            case 7:
-                                text += "," + part5[i].ToString();
-                                break;
-                            case 8:
-                                text += "," + part6[i].ToString();
-                                break;
-                            case 9:
-                                text += "," + part7[i].ToString();
-                                break;
-                            case 10:
-                                text += "," + part8[i].ToString();
-                                break;
-                            case 11:
-                                text += "," + part9[i].ToString();
-                                break;
-                            case 12:
-                                text += "," + part10[i].ToString();
-                                break;
-                        }
+                    text = partsNum.ToString() + "," + tmp + "," + ompu[i] + ",";
+                    foreach (List<int> part in Data)
+                    {
+                        text += part[i].ToString() + ",";
                     }
-                    text += ',';
+                    i++;
                     serialPort1.Write(text);
                     await Task.Delay((int)delay, token);
                 }
@@ -558,16 +503,16 @@ namespace MusicRelay
                 if (serial_end)
                 {
                     ArrayClear();
-                    counter2++;
-                    if(counter2 < 0)
+                    counter++;
+                    if(counter < 0)
                     {
                         await Task.Delay(1000, token);
-                        counter2 = 0;
+                        counter = 0;
                         StartButton.Enabled = true;
                         StopButton.Enabled = false;
                         StartButton.PerformClick();
                     }
-                    else if(counter2 < files.Count)
+                    else if(counter < files.Count)
                     {
                         labelSetColor();
                         await Task.Delay(1000, token);
@@ -578,7 +523,7 @@ namespace MusicRelay
                     else
                     {
                         labelResetColor();
-                        counter2 = 0;
+                        counter = 0;
                         StartButton.Enabled = true;
                         StopButton.Enabled = false;
                     }
@@ -592,17 +537,7 @@ namespace MusicRelay
         private void ArrayClear()
         {
             ompu.Clear();
-            parts.Clear();
-            part1.Clear();
-            part2.Clear();
-            part3.Clear();
-            part4.Clear();
-            part5.Clear();
-            part6.Clear();
-            part7.Clear();
-            part8.Clear();
-            part9.Clear();
-            part10.Clear();
+            Data.Clear();
             partsNum = 0;
         }
         private void SerialStop()
@@ -784,7 +719,7 @@ namespace MusicRelay
         }
         private void labelSetColor()
         {
-            switch (counter2)
+            switch (counter)
             {
                 case 0:
                     label4.ForeColor = Color.Red;
