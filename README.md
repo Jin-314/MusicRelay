@@ -9,6 +9,7 @@ A Musical Performance by Relay!!
 
 # Useage
 1. Please access https://github.com/Jin-314/MusicRelay-ArduinoLibrary.git 
+
    and add MusicRelay-ArduinoLibrary by following the message.
 2. Open MusicRelay.ino
 
