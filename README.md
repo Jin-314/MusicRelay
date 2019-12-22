@@ -25,3 +25,5 @@ File -> Example -> RelayControler -> example MusicRelay
 5. Push "曲を開く" button and select "is" file. (You can download "is" file from MusicRelayI#Folder in release tab)
 6. select "is" file and push start button
 7. Relay may sing melody !
+
+![image](https://user-images.githubusercontent.com/58265068/71322436-d912a580-250a-11ea-8bf5-37d13c4acb15.png)
