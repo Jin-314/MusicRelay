@@ -8,7 +8,8 @@ A Musical Performance by Relay!!
 ![MusicRelay 2019_12_22 21_18_03](https://user-images.githubusercontent.com/58265068/71321686-abc0fa00-2500-11ea-80d4-66d2898c915c.png)
 
 # Useage
-1. Please access https://github.com/Jin-314/MusicRelay-ArduinoLibrary.git and add MusicRelay-ArduinoLibrary by following the message.
+1. Please access https://github.com/Jin-314/MusicRelay-ArduinoLibrary.git 
+   and add MusicRelay-ArduinoLibrary by following the message.
 2. Open MusicRelay.ino
 
 File -> Example -> RelayControler -> example MusicRelay
