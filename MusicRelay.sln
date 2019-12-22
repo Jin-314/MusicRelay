@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicRelay", "MusicRelay\MusicRelay.csproj", "{206B6933-D7E7-47C1-B5C0-C4AAB2640303}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MusicRelaySetup", "MusicRelaySetup\MusicRelaySetup.vdproj", "{E19C33D3-268C-4223-B60A-27C4BC22E65C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{206B6933-D7E7-47C1-B5C0-C4AAB2640303}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{206B6933-D7E7-47C1-B5C0-C4AAB2640303}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{206B6933-D7E7-47C1-B5C0-C4AAB2640303}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E19C33D3-268C-4223-B60A-27C4BC22E65C}.Debug|Any CPU.ActiveCfg = Debug
+		{E19C33D3-268C-4223-B60A-27C4BC22E65C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
