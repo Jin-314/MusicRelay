@@ -20,16 +20,16 @@ namespace MusicRelay
             InitializeComponent();
         }
 
-        private string tmp = "";
         private Button[] buttonArray;
         private Label[] labelArray;
-        private List<string>parts = new List<string>();
         private List<string>ompu = new List<string>();
-        private List<List<int>> Data = new List<List<int>>();
+        private List<int[]> Data = new List<int[]>();
+        private List<string> files = new List<string>();
+        private List<Onkai> onkai = new List<Onkai>();
+        private string tmp = "";
         private int partsNum = 0;
         private int counter = 0;
         private uint delay = 0;
-        private List<string> files = new List<string>();
         private bool serial_end = false;
         private CancellationTokenSource _s = null;
 
@@ -172,10 +172,12 @@ namespace MusicRelay
                     }
                     else
                     {
-                        StreamReader sr = new StreamReader(files[counter], Encoding.GetEncoding("SHIFT_JIS"));
+                        StreamReader sr1 = new StreamReader(files[counter], Encoding.GetEncoding("SHIFT_JIS"));
+                        StreamReader sr2 = new StreamReader("OnkaiData.txt", Encoding.GetEncoding("UTF-8"));
                         labelResetColor();
                         labelSetColor();
-                        FileEncoder(sr);
+                        onkaiLoad(sr2);
+                        FileEncoder(sr1);
                         SerialDate(_s.Token);
                     }
                 }
@@ -240,7 +242,9 @@ namespace MusicRelay
             try
             {
                 string line;
+                List<int> buff1 = new List<int>();
                 List<string> list = new List<string>();
+                List<string> parts = new List<string>();
                 while ((line = sr.ReadLine()) != null)
                 {
                     list.Add(line);
@@ -249,7 +253,6 @@ namespace MusicRelay
                 int i = 0;
                 foreach (string row in list)
                 {
-                    List<int> buff = new List<int>();
                     switch (i)
                     {
                         case 0:
@@ -266,180 +269,34 @@ namespace MusicRelay
                     }
                     foreach (string str in parts)
                     {
-                        int onkai = 0;
-                        switch (str)
+                        float num = 1;
+                        int pos = -1;
+                        string name = str;
+                        while((pos = str.IndexOf('t', pos + 1)) != -1)
                         {
-                            case "0":
-                                onkai = 0;
-                                break;
-                            case "hhhfSI":
-                                onkai = 17168;
-                                break;
-                            case "hhhSI":
-                                onkai = 16192;
-                                break;
-                            case "hhDO":
-                                onkai = 15268;
-                                break;
-                            case "hhfMI":
-                                onkai = 12780;
-                                break;
-                            case "hhMI":
-                                onkai = 12120;
-                                break;
-                            case "hhFA":
-                                onkai = 11460;
-                                break;
-                            case "hhSO":
-                                onkai = 10204;
-                                break;
-                            case "hhfRA":
-                                onkai = 9648;
-                                break;
-                            case "hhRA":
-                                onkai = 9092;
-                                break;
-                            case "hhfSI":
-                                onkai = 8584;
-                                break;
-                            case "hhSI":
-                                onkai = 8096;
-                                break;
-                            case "hDO":
-                                onkai = 7634;
-                                break;
-                            case "hsDO":
-                                onkai = 7215;
-                                break;
-                            case "hRE":
-                                onkai = 6802;
-                                break;
-                            case "hfMI":
-                                onkai = 6390;
-                                break;
-                            case "hMI":
-                                onkai = 6060;
-                                break;
-                            case "hFA":
-                                onkai = 5730;
-                                break;
-                            case "hfSO":
-                                onkai = 5416;
-                                break;
-                            case "hSO":
-                                onkai = 5102;
-                                break;
-                            case "hfRA":
-                                onkai = 4824;
-                                break;
-                            case "hRA":
-                                onkai = 4546;
-                                break;
-                            case "hfSI":
-                                onkai = 4296;
-                                break;
-                            case "hSI":
-                                onkai = 4048;
-                                break;
-                            case "DO":
-                                onkai = 3817;
-                                break;
-                            case "RE":
-                                onkai = 3401;
-                                break;
-                            case "fMI":
-                                onkai = 3195;
-                                break;
-                            case "MI":
-                                onkai = 3030;
-                                break;
-                            case "fFA":
-                                onkai = 2925;
-                                break;
-                            case "FA":
-                                onkai = 2865;
-                                break;
-                            case "fSO":
-                                onkai = 2708;
-                                break;
-                            case "SO":
-                                onkai = 2551;
-                                break;
-                            case "fRA":
-                                onkai = 2412;
-                                break;
-                            case "RA":
-                                onkai = 2273;
-                                break;
-                            case "fSI":
-                                onkai = 2146;
-                                break;
-                            case "SI":
-                                onkai = 2024;
-                                break;
-                            case "tDO":
-                                onkai = 3817 / 2;
-                                break;
-                            case "tRE":
-                                onkai = 3401 / 2;
-                                break;
-                            case "tMI":
-                                onkai = 3030 / 2;
-                                break;
-                            case "tfMI":
-                                onkai = 3195 / 2;
-                                break;
-                            case "tFA":
-                                onkai = 2865 / 2;
-                                break;
-                            case "tSO":
-                                onkai = 2551 / 2;
-                                break;
-                            case "tfRA":
-                                onkai = 2412 / 2;
-                                break;
-                            case "tRA":
-                                onkai = 2273 / 2;
-                                break;
-                            case "tfSI":
-                                onkai = 2146 / 2;
-                                break;
-                            case "tSI":
-                                onkai = 2024 / 2;
-                                break;
-                            case "ttDO":
-                                onkai = 3817 / 4;
-                                break;
-                            case "ttRE":
-                                onkai = 3401 / 4;
-                                break;
-                            case "ttMI":
-                                onkai = 3030 / 4;
-                                break;
-                            case "ttfMI":
-                                onkai = 3195 / 4;
-                                break;
-                            case "ttFA":
-                                onkai = 2865 / 4;
-                                break;
-                            case "ttfSO":
-                                onkai = 2708 / 4;
-                                break;
-                            case "ttSO":
-                                onkai = 2551 / 4;
-                                break;
-                            case "ttRA":
-                                onkai = 2273 / 4;
-                                break;
-                            default:
-                                //MessageBox.Show("音符データが不正です。");
-                                break;
+                            num /= 2;
+                            name = str.Remove(0, pos + 1);
                         }
-                        buff.Add(onkai);
+                        while((pos = str.IndexOf('h', pos + 1)) != -1)
+                        {
+                            num *= 2;
+                            name = str.Remove(0, pos + 1);
+                        }
+                        int result = 
+                            (onkai.Find(m => m.Name == name) == null) ? 0 : (int)(onkai.Find(m => m.Name == name).Value * num);
+                        buff1.Add(result);
                         i++;
                     }
-                    Data.Add(buff);
+                    int[] buff2 = new int[buff1.Count];
+                    int j = 0;
+                    foreach(int buff in buff1)
+                    {
+                        buff2[j] = buff;
+                        j++;
+                    }
+                    Data.Add(buff2);
                     parts.Clear();
+                    buff1.Clear();
                 }
             }
             catch (Exception exc)
@@ -450,6 +307,35 @@ namespace MusicRelay
             {
                 sr.Close();
             }
+        }
+        private void onkaiLoad(StreamReader sr)
+        {
+            string line;
+            List<string> list = new List<string>();
+            List<string[]> otoData = new List<string[]>();
+            List<int> vals = new List<int>();
+            while ((line = sr.ReadLine()) != null)
+            {
+                list.Add(line);
+            }
+            otoData.Add(list[0].Split(','));
+            otoData.Add(list[1].Split(','));
+            int j = 0;
+            foreach(string val in otoData[1])
+            {
+                vals.Add(int.Parse(val));
+                j++;
+            }
+            j = 0;
+            foreach(string name in otoData[0])
+            {
+                Onkai oto = new Onkai();
+                oto.Name = name;
+                oto.Value = vals[j];
+                onkai.Add(oto);
+                j++;
+            }
+            sr.Close();
         }
         private async void SerialDate(CancellationToken token)
         {
@@ -483,12 +369,9 @@ namespace MusicRelay
                         case 1:
                             delay = 60 * 1000 / uint.Parse(tmp) * 4;
                             break;
-                        default:
-                            //MessageBox.Show("音符データが不正です。");
-                            break;
                     }
                     text = partsNum.ToString() + "," + tmp + "," + ompu[i] + ",";
-                    foreach (List<int> part in Data)
+                    foreach (int[] part in Data)
                     {
                         text += part[i].ToString() + ",";
                     }
@@ -531,7 +414,7 @@ namespace MusicRelay
             }
             catch(Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                //例外を無視
             }
         }
         private void ArrayClear()
@@ -546,168 +429,32 @@ namespace MusicRelay
             comboBox1.Enabled = true;
             button1.Text = "Connect";
             label2.Text = "disConnected";
-            button2.Enabled = false;
-            button3.Enabled = false;
-            button4.Enabled = false;
-            button5.Enabled = false;
-            button6.Enabled = false;
-            button7.Enabled = false;
-            button8.Enabled = false;
-            button9.Enabled = false;
-            button10.Enabled = false;
-            button11.Enabled = false;
+            buttonClear();
             StartButton.Enabled = false;
             StopButton.Enabled = false;
             NextButton.Enabled = false;
             ReturnButton.Enabled = false;
-            label4.Text = "FileName";
-            label5.Text = "FileName";
-            label6.Text = "FileName";
-            label8.Text = "FileName";
-            label7.Text = "FileName";
-            label9.Text = "FileName";
-            label10.Text = "FileName";
-            label11.Text = "FileName";
-            label12.Text = "FileName";
-            label13.Text = "FileName";
+            for(int i = 3; i < labelArray.Length; i++)
+            {
+                labelArray[i].Text = "FileName";
+            }
         }
         private void buttonClear()
         {
-            button2.Enabled = false;
-            button3.Enabled = false;
-            button4.Enabled = false;
-            button5.Enabled = false;
-            button6.Enabled = false;
-            button7.Enabled = false;
-            button8.Enabled = false;
-            button9.Enabled = false;
-            button10.Enabled = false;
-            button11.Enabled = false;
+            for(int i = 1; i < buttonArray.Length; i++)
+            {
+                buttonArray[i].Enabled = false;
+            }
         }
         private void buttonEnable()
         {
-            switch (files.Count)
+            buttonClear();
+            if(files.Count != 10)
             {
-                case 1:
-                    button2.Enabled = true;
-                    button3.Enabled = false;
-                    button4.Enabled = false;
-                    button5.Enabled = false;
-                    button6.Enabled = false;
-                    button7.Enabled = false;
-                    button8.Enabled = false;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 2:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = false;
-                    button5.Enabled = false;
-                    button6.Enabled = false;
-                    button7.Enabled = false;
-                    button8.Enabled = false;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 3:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = false;
-                    button6.Enabled = false;
-                    button7.Enabled = false;
-                    button8.Enabled = false;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 4:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = false;
-                    button7.Enabled = false;
-                    button8.Enabled = false;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 5:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = true;
-                    button7.Enabled = false;
-                    button8.Enabled = false;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 6:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = true;
-                    button7.Enabled = true;
-                    button8.Enabled = false;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 7:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = true;
-                    button7.Enabled = true;
-                    button8.Enabled = true;
-                    button9.Enabled = false;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 8:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = true;
-                    button7.Enabled = true;
-                    button8.Enabled = true;
-                    button9.Enabled = true;
-                    button10.Enabled = false;
-                    button11.Enabled = false;
-                    break;
-                case 9:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = true;
-                    button7.Enabled = true;
-                    button8.Enabled = true;
-                    button9.Enabled = true;
-                    button10.Enabled = true;
-                    button11.Enabled = false;
-                    break;
-                case 10:
-                    button2.Enabled = true;
-                    button3.Enabled = true;
-                    button4.Enabled = true;
-                    button5.Enabled = true;
-                    button6.Enabled = true;
-                    button7.Enabled = true;
-                    button8.Enabled = true;
-                    button9.Enabled = true;
-                    button10.Enabled = true;
-                    button11.Enabled = true;
-                    break;
+                for(int i = 1; i < files.Count + 2; i++)
+                {
+                    buttonArray[i].Enabled = true;
+                }
             }
         }
         private void TaskCancel()
@@ -719,61 +466,21 @@ namespace MusicRelay
         }
         private void labelSetColor()
         {
-            switch (counter)
-            {
-                case 0:
-                    label4.ForeColor = Color.Red;
-                    break;
-                case 1:
-                    label4.ForeColor = Color.Black;
-                    label5.ForeColor = Color.Red;
-                    break;
-                case 2:
-                    label5.ForeColor = Color.Black;
-                    label6.ForeColor = Color.Red;
-                    break;
-                case 3:
-                    label6.ForeColor = Color.Black;
-                    label7.ForeColor = Color.Red;
-                    break;
-                case 4:
-                    label7.ForeColor = Color.Black;
-                    label8.ForeColor = Color.Red;
-                    break;
-                case 5:
-                    label8.ForeColor = Color.Black;
-                    label9.ForeColor = Color.Red;
-                    break;
-                case 6:
-                    label9.ForeColor = Color.Black;
-                    label10.ForeColor = Color.Red;
-                    break;
-                case 7:
-                    label10.ForeColor = Color.Black;
-                    label11.ForeColor = Color.Red;
-                    break;
-                case 8:
-                    label11.ForeColor = Color.Black;
-                    label12.ForeColor = Color.Red;
-                    break;
-                case 9:
-                    label12.ForeColor = Color.Black;
-                    label13.ForeColor = Color.Red;
-                    break;
-            }
+            if(counter != 0)
+                labelArray[counter + 2].ForeColor = Color.Black;
+            labelArray[counter + 3].ForeColor = Color.Red;
         }
         private void labelResetColor()
         {
-            label4.ForeColor = Color.Black;
-            label5.ForeColor = Color.Black;
-            label6.ForeColor = Color.Black;
-            label7.ForeColor = Color.Black;
-            label8.ForeColor = Color.Black;
-            label9.ForeColor = Color.Black;
-            label10.ForeColor = Color.Black;
-            label11.ForeColor = Color.Black;
-            label12.ForeColor = Color.Black;
-            label13.ForeColor = Color.Black;
+            for(int i = 3; i < labelArray.Length; i++)
+            {
+                labelArray[i].ForeColor = Color.Black;
+            }
         }
+    }
+    public class Onkai
+    {
+        public string Name { get; set; }
+        public int Value { get; set; }
     }
 }

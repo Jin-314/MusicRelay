@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="music.ico" />
+    <Content Include="OnkaiData.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

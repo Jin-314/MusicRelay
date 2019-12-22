@@ -89,9 +89,9 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label2.Location = new System.Drawing.Point(101, 60);
+            this.label2.Location = new System.Drawing.Point(16, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(473, 45);
+            this.label2.Size = new System.Drawing.Size(665, 45);
             this.label2.TabIndex = 3;
             this.label2.Text = "disConnect";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -164,9 +164,9 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label15.Location = new System.Drawing.Point(107, 106);
+            this.label15.Location = new System.Drawing.Point(10, 106);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(467, 32);
+            this.label15.Size = new System.Drawing.Size(677, 32);
             this.label15.TabIndex = 10;
             this.label15.Text = "再生リスト";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
