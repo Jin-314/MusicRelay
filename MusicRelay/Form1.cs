@@ -20,6 +20,7 @@ namespace MusicRelay
             InitializeComponent();
         }
 
+        //各種変数を宣言
         private Button[] buttonArray;
         private Label[] labelArray;
         private List<string>ompu = new List<string>();
@@ -33,6 +34,7 @@ namespace MusicRelay
         private bool serial_end = false;
         private CancellationTokenSource _s = null;
 
+        //connectbuttonのクリックイベント
         private void start_serial(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
@@ -106,12 +108,13 @@ namespace MusicRelay
             NextButton.Enabled = false;
             ReturnButton.Enabled = false;
         }
-
+        //各種ボタンのクリックイベント
         private void button_Clicked(object sender, EventArgs e)
         {
             if (this.Enabled)
             {
                 int index = -1;
+                //押したボタンについてボタン配列のインデックスを取得
                 for(int i = 0; i < buttonArray.Length; i++)
                 {
                     if (buttonArray[i].Equals(sender))
@@ -120,6 +123,7 @@ namespace MusicRelay
                         break;
                     }
                 }
+                //ダイアログを表示して選択したファイルのパスを取得し、ファイルパスの配列に追加
                 if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     string filePath = openFileDialog1.FileName;
@@ -172,12 +176,14 @@ namespace MusicRelay
                     }
                     else
                     {
+                        //ファイルパス用の配列から現在のファイルのパスを取得し、ファイル解読用のメソッドへ
                         StreamReader sr1 = new StreamReader(files[counter], Encoding.GetEncoding("SHIFT_JIS"));
                         StreamReader sr2 = new StreamReader("OnkaiData.txt", Encoding.GetEncoding("UTF-8"));
                         labelResetColor();
                         labelSetColor();
                         onkaiLoad(sr2);
                         FileEncoder(sr1);
+                        //解読が終了し、データをシリアル通信でarduinoに送信
                         SerialDate(_s.Token);
                     }
                 }
@@ -237,6 +243,7 @@ namespace MusicRelay
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.Open();
         }
+        //ファイル読み込み＆配列格納用メソッド
         private void FileEncoder(StreamReader sr)
         {
             try
@@ -245,12 +252,14 @@ namespace MusicRelay
                 List<int> buff1 = new List<int>();
                 List<string> list = new List<string>();
                 List<string> parts = new List<string>();
+                //配列に音符データの各行を格納
                 while ((line = sr.ReadLine()) != null)
                 {
                     list.Add(line);
                 }
                 partsNum = list.Count();
                 int i = 0;
+                //各行について処理
                 foreach (string row in list)
                 {
                     switch (i)
@@ -272,6 +281,7 @@ namespace MusicRelay
                         float num = 1;
                         int pos = -1;
                         string name = str;
+                        //音階のデータを周波数に変換するための解読コード
                         while((pos = str.IndexOf('t', pos + 1)) != -1)
                         {
                             num /= 2;
@@ -337,6 +347,7 @@ namespace MusicRelay
             }
             sr.Close();
         }
+        //シリアル送信用メソッド
         private async void SerialDate(CancellationToken token)
         {
             try
