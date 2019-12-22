@@ -1,5 +1,8 @@
 # MusicRelay
 A Musical Performance by Relay!!
+
+![image](https://user-images.githubusercontent.com/58265068/71322436-d912a580-250a-11ea-8bf5-37d13c4acb15.png)
+
 # Install
 1. Please move to release tab.
 2. And download msi or exe file
