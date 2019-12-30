@@ -15,14 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_6F4716E3C1F66915812E9AE30B885A51"
-        "OwnerKey" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
+        "MsmKey" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_6F4716E3C1F66915812E9AE30B885A51"
+        "OwnerKey" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
+        "OwnerKey" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -62,6 +62,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -215,7 +223,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MusicRelay"
         "ProductCode" = "8:{E08935BC-E910-4697-B987-0E9F88E610A6}"
-        "PackageCode" = "8:{82CC6523-34D7-408C-B247-00792226C2DF}"
+        "PackageCode" = "8:{D1527456-C12E-48A1-9AFC-EEC1E424DA89}"
         "UpgradeCode" = "8:{99FCE997-4597-4115-BE2E-8B3E381F2126}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -335,7 +343,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2BC63AC8210B4283B34B0FCA468CB547"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6680C91287624CEEB8B5969EBAD70490"
             {
             "Name" = "8:MusicRelay"
             "Arguments" = "8:"
@@ -343,24 +351,24 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
-            "Folder" = "8:_93976FD8AE934EFFA64939B3A59FA063"
-            "WorkingFolder" = "8:_A62E28ADAC094262B95149D060C32974"
-            "Icon" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3D5921ABA3BF45A9A2180EDAB631E18A"
-            {
-            "Name" = "8:MusicRelay"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:32512"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
+            "Target" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
             "Folder" = "8:_BDEA88EACF6C40DA8024F630AD244C49"
             "WorkingFolder" = "8:_A62E28ADAC094262B95149D060C32974"
-            "Icon" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
+            "Icon" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C645622C757140829070583A58C11EF7"
+            {
+            "Name" = "8:MusicRelay"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:32512"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
+            "Folder" = "8:_93976FD8AE934EFFA64939B3A59FA063"
+            "WorkingFolder" = "8:_A62E28ADAC094262B95149D060C32974"
+            "Icon" = "8:_2B453B7AC7954CE5B9624AFF1351EBF9"
             "Feature" = "8:"
             }
         }
@@ -762,9 +770,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FF5125519B7F4B01A3BDF5BE101FB3DF"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2B453B7AC7954CE5B9624AFF1351EBF9"
             {
-            "SourcePath" = "8:..\\MusicRelay\\obj\\Release\\MusicRelay.exe"
+            "SourcePath" = "8:..\\MusicRelay\\obj\\Debug\\MusicRelay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A62E28ADAC094262B95149D060C32974"
