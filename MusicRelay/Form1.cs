@@ -19,23 +19,27 @@ namespace MusicRelay
         {
             InitializeComponent();
         }
+        //ノートの種類
         private enum NoteType
         {
             On,
             Off,
         }
+        //ノートの情報を格納する構造体
         private struct NoteData
         {
             public int eventTime;
             public int laneIndex;
             public NoteType type;
         }
+        //テンポを格納する構造体
         private struct TempoData
         {
             public int eventTime;
             public float bpm;
             public float tick;
         }
+        //ヘッダーチャンク解析用
         private struct HeaderChunkData
         {
             public byte[] cunkID;
@@ -44,13 +48,14 @@ namespace MusicRelay
             public short tracks;
             public short division;
         };
+        //トラックチャンク解析用
         private struct TrackChunkData
         {
             public byte[] chunkID;
             public int dataLength;
             public byte[] data;
         };
-        //各種変数を宣言
+        //フォームコントロールの配列
         private Button[] buttonArray;
         private Label[] labelArray;
         private List<string> files = new List<string>();
@@ -60,7 +65,7 @@ namespace MusicRelay
         private HeaderChunkData headerChunk = new HeaderChunkData();
         private CancellationTokenSource _s = null;
 
-        //connectbuttonのクリックイベント
+        //Connect Buttonのクリックイベント
         private void start_serial(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
@@ -83,6 +88,7 @@ namespace MusicRelay
                 }                
             }
         }
+        //フォームコントロールの名前からコントロールを検索し、配列に格納
         public object GetControlArrayByName(Form frm, string name)
         {
             System.Collections.ArrayList ctrs =
@@ -107,6 +113,7 @@ namespace MusicRelay
                 return null;
             return fi.GetValue(frm);
         }
+        //form1の初期処理
         private void Form1_Load(object sender, EventArgs e)
         {
             this.AutoScroll = true;
@@ -200,11 +207,10 @@ namespace MusicRelay
                     }
                     else
                     {
-                        //ファイルパス用の配列から現在のファイルのパスを取得し、ファイル解読用のメソッドへ
                         labelResetColor();
                         labelSetColor();
                         FileEncoder();
-                        //解読が終了し、データをシリアル通信でarduinoに送信
+                        //解読が終了したら、データをシリアル通信でarduinoに送信
                         SerialDate(_s.Token);
                     }
                 }
@@ -261,17 +267,23 @@ namespace MusicRelay
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.Open();
         }
-        //ファイル読み込み＆配列格納用メソッド
+        //midi解析＆配列格納用メソッド
         private void FileEncoder()
         {
             noteList.Clear();
             tempoList.Clear();
+            //現在の再生位置のファイルパスからファイルをバイナリで開く
             using (FileStream stream = new FileStream(files[counter], FileMode.Open, FileAccess.Read))
             using (BinaryReader reader = new BinaryReader(stream))
             {
+
                 headerChunk.cunkID = reader.ReadBytes(4);
+
+                //ヘッダチャンクの解析
                 if (BitConverter.IsLittleEndian)
                 {
+                    //リトルエディアンならビットを反転させる
+
                     byte[] byteArray = reader.ReadBytes(4);
                     Array.Reverse(byteArray);
                     headerChunk.dataLength = BitConverter.ToInt32(byteArray, 0);
@@ -297,7 +309,7 @@ namespace MusicRelay
                 }
 
                 TrackChunkData[] trackChunks = new TrackChunkData[headerChunk.tracks];
-
+                //トラックチャンクの解析
                 for (int i = 0; i < headerChunk.tracks; i++)
                 {
                     trackChunks[i].chunkID = reader.ReadBytes(4);
@@ -312,10 +324,13 @@ namespace MusicRelay
                         trackChunks[i].dataLength = BitConverter.ToInt32(reader.ReadBytes(4), 0);
                     }
                     trackChunks[i].data = reader.ReadBytes(trackChunks[i].dataLength);
+                    //各トラックデータについてイベントとデルタタイムの抽出
                     TrackDataAnalaysis(trackChunks[i].data);
                 }
             }
         }
+        //midi / メタ イベント抽出用メソッド
+        //主にデルタタイム、ノート番号、テンポの変化を見て配列に格納する
         private void TrackDataAnalaysis(byte[] data)
         {
             uint currentTime = 0;
@@ -327,6 +342,7 @@ namespace MusicRelay
                 uint deltaTime = 0;
                 while (true)
                 {
+                    //デルタタイムの抽出
                     byte tmp = data[i++];
                     deltaTime |= tmp & (uint)0x7f;
                     if ((tmp & 0x80) == 0) break;
@@ -335,7 +351,7 @@ namespace MusicRelay
                 currentTime = deltaTime;
                 if (data[i] < 0x80)
                 {
-
+                    //ランニングステータス
                 }
                 else
                 {
@@ -348,6 +364,7 @@ namespace MusicRelay
                 {
                     switch (statusByte & 0xf0)
                     {
+                        //ノートオフ
                         case 0x80:
                             dataByte0 = data[i++];
                             dataByte1 = data[i++];
@@ -362,6 +379,7 @@ namespace MusicRelay
                                 longFlags[note.laneIndex] = false;
                             }
                             break;
+                        //ノートオン
                         case 0x90:
                             dataByte0 = data[i++];
                             dataByte1 = data[i++];
@@ -382,6 +400,7 @@ namespace MusicRelay
                                 noteList.Add(note);
                             }
                             break;
+                        //これ以降はインクリメント用
                         case 0xa0:
                             i += 2;
                             break;
@@ -416,11 +435,13 @@ namespace MusicRelay
                             break;
                     }
                 }
+                //SysExイベント用、インクリメントオンリー
                 else if (statusByte == 0x70 || statusByte == 0x7f)
                 {
                     byte dataLength = data[i++];
                     i += dataLength;
                 }
+                //メタイベント用
                 else if (statusByte == 0xff)
                 {
                     byte metaEventID = data[i++];
@@ -444,6 +465,7 @@ namespace MusicRelay
                         case 0x7f:
                             i += dataLength;
                             break;
+                        //テンポ情報を格納
                         case 0x51:
                             {
                                 TempoData tempoData = new TempoData();
@@ -475,9 +497,13 @@ namespace MusicRelay
                 foreach (NoteData data in noteList)
                 {
                     int tempo = (int)tempoList[0].bpm;
+                    //インデックスから周期を計算
                     double freq = 440.0 * (Math.Pow(2.0, ((data.laneIndex - 69) / 12.0)));
+                    //マイコンが制御しやすいようにマイクロ秒単位周期に変換
                     int period = (int)(1000000 / freq);
 
+                    //鳴らすパートを指定し、マイコンに送信
+                    //こうすることでマイコン側が制御しやすくなる
                     if (parts[data.laneIndex] == 0)
                     {
                         parts[data.laneIndex] = j;
@@ -556,6 +582,7 @@ namespace MusicRelay
                 //例外を無視
             }
         }
+        //以降コントロール制御用メソッド
         private void SerialStop()
         {
             serialPort1.Close();
