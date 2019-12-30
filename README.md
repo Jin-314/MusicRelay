@@ -25,7 +25,7 @@ File -> Example -> RelayControler -> example MusicRelay
 
 ![image](https://user-images.githubusercontent.com/58265068/71321888-b204a580-2503-11ea-9b65-50189367f276.png)
 
-5. Push "曲を開く" button and select "is" file. (You can download "is" file from MusicRelayI#Folder in release tab)
+5. Push "曲を開く" button and select "midi" file. ※There are some files cannot play.
 6. select "is" file and push start button
 7. Relay may sing melody !
 
