@@ -99,7 +99,7 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "I# 楽譜ファイル(*.is)|*.is";
+            this.openFileDialog1.Filter = "midiファイル(*.mid)|*.mid";
             // 
             // tableLayoutPanel1
             // 

@@ -19,19 +19,45 @@ namespace MusicRelay
         {
             InitializeComponent();
         }
-
+        private enum NoteType
+        {
+            On,
+            Off,
+        }
+        private struct NoteData
+        {
+            public int eventTime;
+            public int laneIndex;
+            public NoteType type;
+        }
+        private struct TempoData
+        {
+            public int eventTime;
+            public float bpm;
+            public float tick;
+        }
+        private struct HeaderChunkData
+        {
+            public byte[] cunkID;
+            public int dataLength;
+            public short format;
+            public short tracks;
+            public short division;
+        };
+        private struct TrackChunkData
+        {
+            public byte[] chunkID;
+            public int dataLength;
+            public byte[] data;
+        };
         //各種変数を宣言
         private Button[] buttonArray;
         private Label[] labelArray;
-        private List<string>ompu = new List<string>();
-        private List<int[]> Data = new List<int[]>();
         private List<string> files = new List<string>();
-        private List<Onkai> onkai = new List<Onkai>();
-        private string tmp = "";
-        private int partsNum = 0;
+        private List<NoteData> noteList = new List<NoteData>();
+        private List<TempoData> tempoList = new List<TempoData>();
         private int counter = 0;
-        private uint delay = 0;
-        private bool serial_end = false;
+        private HeaderChunkData headerChunk = new HeaderChunkData();
         private CancellationTokenSource _s = null;
 
         //connectbuttonのクリックイベント
@@ -159,7 +185,6 @@ namespace MusicRelay
                     StartButton.Enabled = false;
                     StopButton.Enabled = true;
                     buttonClear();
-                    serial_end = false;
                     _s = new CancellationTokenSource();
                     if(counter < 0)
                     {
@@ -169,7 +194,6 @@ namespace MusicRelay
                     {
                         labelResetColor();
                         counter = 0;
-                        ArrayClear();
                         buttonEnable();
                         StartButton.Enabled = true;
                         StopButton.Enabled = false;
@@ -177,12 +201,9 @@ namespace MusicRelay
                     else
                     {
                         //ファイルパス用の配列から現在のファイルのパスを取得し、ファイル解読用のメソッドへ
-                        StreamReader sr1 = new StreamReader(files[counter], Encoding.GetEncoding("SHIFT_JIS"));
-                        StreamReader sr2 = new StreamReader("OnkaiData.txt", Encoding.GetEncoding("UTF-8"));
                         labelResetColor();
                         labelSetColor();
-                        onkaiLoad(sr2);
-                        FileEncoder(sr1);
+                        FileEncoder();
                         //解読が終了し、データをシリアル通信でarduinoに送信
                         SerialDate(_s.Token);
                     }
@@ -200,7 +221,6 @@ namespace MusicRelay
                 try
                 {
                     TaskCancel();
-                    ArrayClear();
                     buttonEnable();
                     labelResetColor();
                     StopButton.Enabled = false;
@@ -217,7 +237,6 @@ namespace MusicRelay
         {
             if (NextButton.Enabled)
             {
-                ArrayClear();
                 TaskCancel();
                 StartButton.Enabled = true;
                 counter++;
@@ -230,7 +249,6 @@ namespace MusicRelay
             if (ReturnButton.Enabled)
             {
                 TaskCancel();
-                ArrayClear();
                 StartButton.Enabled = true;
                 counter--;
                 Thread.Sleep(500);
@@ -244,195 +262,299 @@ namespace MusicRelay
             serialPort1.Open();
         }
         //ファイル読み込み＆配列格納用メソッド
-        private void FileEncoder(StreamReader sr)
+        private void FileEncoder()
         {
-            try
+            noteList.Clear();
+            tempoList.Clear();
+            using (FileStream stream = new FileStream(files[counter], FileMode.Open, FileAccess.Read))
+            using (BinaryReader reader = new BinaryReader(stream))
             {
-                string line;
-                List<int> buff1 = new List<int>();
-                List<string> list = new List<string>();
-                List<string> parts = new List<string>();
-                //配列に音符データの各行を格納
-                while ((line = sr.ReadLine()) != null)
+                headerChunk.cunkID = reader.ReadBytes(4);
+                if (BitConverter.IsLittleEndian)
                 {
-                    list.Add(line);
+                    byte[] byteArray = reader.ReadBytes(4);
+                    Array.Reverse(byteArray);
+                    headerChunk.dataLength = BitConverter.ToInt32(byteArray, 0);
+
+                    byteArray = reader.ReadBytes(2);
+                    Array.Reverse(byteArray);
+                    headerChunk.format = BitConverter.ToInt16(byteArray, 0);
+
+                    byteArray = reader.ReadBytes(2);
+                    Array.Reverse(byteArray);
+                    headerChunk.tracks = BitConverter.ToInt16(byteArray, 0);
+
+                    byteArray = reader.ReadBytes(2);
+                    Array.Reverse(byteArray);
+                    headerChunk.division = BitConverter.ToInt16(byteArray, 0);
                 }
-                partsNum = list.Count();
-                int i = 0;
-                //各行について処理
-                foreach (string row in list)
+                else
                 {
-                    switch (i)
-                    {
-                        case 0:
-                            tmp = row;
-                            i++;
-                            continue;
-                        case 1:
-                            ompu.AddRange(row.Split('\t'));
-                            i++;
-                            continue;
-                        default:
-                            parts.AddRange(row.Split('\t'));
-                            break;
-                    }
-                    foreach (string str in parts)
-                    {
-                        float num = 1;
-                        int pos = -1;
-                        string name = str;
-                        //音階のデータを周波数に変換するための解読コード
-                        while((pos = str.IndexOf('t', pos + 1)) != -1)
-                        {
-                            num /= 2;
-                            name = str.Remove(0, pos + 1);
-                        }
-                        while((pos = str.IndexOf('h', pos + 1)) != -1)
-                        {
-                            num *= 2;
-                            name = str.Remove(0, pos + 1);
-                        }
-                        int result = 
-                            (onkai.Find(m => m.Name == name) == null) ? 0 : (int)(onkai.Find(m => m.Name == name).Value * num);
-                        buff1.Add(result);
-                        i++;
-                    }
-                    int[] buff2 = new int[buff1.Count];
-                    int j = 0;
-                    foreach(int buff in buff1)
-                    {
-                        buff2[j] = buff;
-                        j++;
-                    }
-                    Data.Add(buff2);
-                    parts.Clear();
-                    buff1.Clear();
+                    headerChunk.dataLength = BitConverter.ToInt32(reader.ReadBytes(4), 0);
+                    headerChunk.format = BitConverter.ToInt16(reader.ReadBytes(2), 0);
+                    headerChunk.tracks = BitConverter.ToInt16(reader.ReadBytes(2), 0);
+                    headerChunk.division = BitConverter.ToInt16(reader.ReadBytes(2), 0);
                 }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                sr.Close();
+
+                TrackChunkData[] trackChunks = new TrackChunkData[headerChunk.tracks];
+
+                for (int i = 0; i < headerChunk.tracks; i++)
+                {
+                    trackChunks[i].chunkID = reader.ReadBytes(4);
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        byte[] byteArray = reader.ReadBytes(4);
+                        Array.Reverse(byteArray);
+                        trackChunks[i].dataLength = BitConverter.ToInt32(byteArray, 0);
+                    }
+                    else
+                    {
+                        trackChunks[i].dataLength = BitConverter.ToInt32(reader.ReadBytes(4), 0);
+                    }
+                    trackChunks[i].data = reader.ReadBytes(trackChunks[i].dataLength);
+                    TrackDataAnalaysis(trackChunks[i].data);
+                }
             }
         }
-        private void onkaiLoad(StreamReader sr)
+        private void TrackDataAnalaysis(byte[] data)
         {
-            string line;
-            List<string> list = new List<string>();
-            List<string[]> otoData = new List<string[]>();
-            List<int> vals = new List<int>();
-            while ((line = sr.ReadLine()) != null)
+            uint currentTime = 0;
+            byte statusByte = 0;
+            bool[] longFlags = new bool[128];
+
+            for (int i = 0; i < data.Length;)
             {
-                list.Add(line);
+                uint deltaTime = 0;
+                while (true)
+                {
+                    byte tmp = data[i++];
+                    deltaTime |= tmp & (uint)0x7f;
+                    if ((tmp & 0x80) == 0) break;
+                    deltaTime = deltaTime << 7;
+                }
+                currentTime = deltaTime;
+                if (data[i] < 0x80)
+                {
+
+                }
+                else
+                {
+                    statusByte = data[i++];
+                }
+
+                byte dataByte0, dataByte1;
+
+                if (statusByte >= 0x80 && statusByte <= 0xef)
+                {
+                    switch (statusByte & 0xf0)
+                    {
+                        case 0x80:
+                            dataByte0 = data[i++];
+                            dataByte1 = data[i++];
+                            if (longFlags[dataByte0])
+                            {
+                                NoteData note = new NoteData();
+                                note.eventTime = (int)currentTime;
+                                note.laneIndex = (int)dataByte0;
+                                note.type = NoteType.Off;
+
+                                noteList.Add(note);
+                                longFlags[note.laneIndex] = false;
+                            }
+                            break;
+                        case 0x90:
+                            dataByte0 = data[i++];
+                            dataByte1 = data[i++];
+                            {
+                                NoteData note = new NoteData();
+                                note.eventTime = (int)currentTime;
+                                note.laneIndex = (int)dataByte0;
+                                note.type = NoteType.On;
+                                longFlags[note.laneIndex] = true;
+                                if (dataByte1 == 0)
+                                {
+                                    if (longFlags[note.laneIndex])
+                                    {
+                                        note.type = NoteType.Off;
+                                        longFlags[note.laneIndex] = false;
+                                    }
+                                }
+                                noteList.Add(note);
+                            }
+                            break;
+                        case 0xa0:
+                            i += 2;
+                            break;
+                        case 0xb0:
+                            dataByte0 = data[i++];
+                            dataByte1 = data[i++];
+                            if (dataByte0 < 0x78)
+                            {
+
+                            }
+                            else
+                            {
+                                switch (dataByte0)
+                                {
+                                    case 0x78:
+                                    case 0x7a:
+                                    case 0x7b:
+                                    case 0x7c:
+                                    case 0x7d:
+                                    case 0x7e:
+                                    case 0x7f:
+                                        break;
+                                }
+                            }
+                            break;
+                        case 0xc0:
+                        case 0xd0:
+                            i += 1;
+                            break;
+                        case 0xe0:
+                            i += 2;
+                            break;
+                    }
+                }
+                else if (statusByte == 0x70 || statusByte == 0x7f)
+                {
+                    byte dataLength = data[i++];
+                    i += dataLength;
+                }
+                else if (statusByte == 0xff)
+                {
+                    byte metaEventID = data[i++];
+                    byte dataLength = data[i++];
+                    switch (metaEventID)
+                    {
+                        case 0x00:
+                        case 0x01:
+                        case 0x02:
+                        case 0x03:
+                        case 0x04:
+                        case 0x05:
+                        case 0x06:
+                        case 0x07:
+                        case 0x20:
+                        case 0x21:
+                        case 0x2f:
+                        case 0x54:
+                        case 0x58:
+                        case 0x59:
+                        case 0x7f:
+                            i += dataLength;
+                            break;
+                        case 0x51:
+                            {
+                                TempoData tempoData = new TempoData();
+                                tempoData.eventTime = (int)currentTime;
+                                uint tempo = 0;
+                                tempo |= data[i++];
+                                tempo <<= 8;
+                                tempo |= data[i++];
+                                tempo <<= 8;
+                                tempo |= data[i++];
+                                tempoData.bpm = 60000000 / (float)tempo;
+                                tempoData.bpm = (float)(Math.Floor(tempoData.bpm * 10) / 10);
+                                tempoList.Add(tempoData);
+                            }
+                            break;
+                    }
+                }
             }
-            otoData.Add(list[0].Split(','));
-            otoData.Add(list[1].Split(','));
-            int j = 0;
-            foreach(string val in otoData[1])
-            {
-                vals.Add(int.Parse(val));
-                j++;
-            }
-            j = 0;
-            foreach(string name in otoData[0])
-            {
-                Onkai oto = new Onkai();
-                oto.Name = name;
-                oto.Value = vals[j];
-                onkai.Add(oto);
-                j++;
-            }
-            sr.Close();
         }
         //シリアル送信用メソッド
         private async void SerialDate(CancellationToken token)
         {
             try
             {
-                int i = 0;
-                foreach (string str in ompu)
+                int i = 0, j = 1;
+                int delay = 0;
+                int[] parts = new int[128];
+                string text = "";
+                foreach (NoteData data in noteList)
                 {
-                    int _ompu = int.Parse(str);
-                    String text = "";
-                    switch (_ompu)
+                    int tempo = (int)tempoList[0].bpm;
+                    double freq = 440.0 * (Math.Pow(2.0, ((data.laneIndex - 69) / 12.0)));
+                    int period = (int)(1000000 / freq);
+
+                    if (parts[data.laneIndex] == 0)
                     {
-                        case 32:
-                            delay = 60 * 1000 / uint.Parse(tmp) / 8;
-                            break;
-                        case 16:
-                            delay = 60 * 1000 / uint.Parse(tmp) / 4;
-                            break;
-                        case 12:
-                            delay = 60 * 1000 / uint.Parse(tmp) / 3;
-                            break;
-                        case 8:
-                            delay = 60 * 1000 / uint.Parse(tmp) / 2;
-                            break;
-                        case 4:
-                            delay = 60 * 1000 / uint.Parse(tmp);
-                            break;
-                        case 2:
-                            delay = 60 * 1000 / uint.Parse(tmp) * 2;
-                            break;
-                        case 1:
-                            delay = 60 * 1000 / uint.Parse(tmp) * 4;
-                            break;
+                        parts[data.laneIndex] = j;
                     }
-                    text = partsNum.ToString() + "," + tmp + "," + ompu[i] + ",";
-                    foreach (int[] part in Data)
+                    if (data.type == NoteType.On)
                     {
-                        text += part[i].ToString() + ",";
+                        text += parts[data.laneIndex].ToString() + ",On," + period.ToString() + ",";
                     }
-                    i++;
-                    serialPort1.Write(text);
-                    await Task.Delay((int)delay, token);
-                }
-                if(i >= ompu.Count)
-                {
-                    serial_end = true;
-                }
-                if (serial_end)
-                {
-                    ArrayClear();
-                    counter++;
-                    if(counter < 0)
-                    {
-                        await Task.Delay(1000, token);
-                        counter = 0;
-                        StartButton.Enabled = true;
-                        StopButton.Enabled = false;
-                        StartButton.PerformClick();
+                    else if(data.type == NoteType.Off){
+                        text += parts[data.laneIndex].ToString() + ",Off,";
+                        parts[data.laneIndex] = 0;
                     }
-                    else if(counter < files.Count)
+                    if(data.eventTime != 0)
                     {
-                        labelSetColor();
-                        await Task.Delay(1000, token);
-                        StartButton.Enabled = true;
-                        StopButton.Enabled = false;
-                        StartButton.PerformClick();
+                        delay = (int)((60000 / tempo) * (double)((double)data.eventTime / (double)headerChunk.division));
+                    }
+                    if (i < noteList.Count - 1)
+                    {
+                        NoteData nextData = noteList[i + 1];
+                        if (nextData.eventTime == 0)
+                        {
+                            if(data.type == nextData.type)
+                            {
+                                j += 1;
+                            }
+                            else
+                            {
+                                j = 1;
+                            }
+                        }
+                        else
+                        {
+                            j = 1;
+                            await Task.Delay(delay, token);
+                            serialPort1.Write(text);
+                            label15.Text = text;
+                            text = "";
+                        }
                     }
                     else
                     {
-                        labelResetColor();
-                        counter = 0;
-                        StartButton.Enabled = true;
-                        StopButton.Enabled = false;
+                        await Task.Delay(delay, token);
+                        serialPort1.Write(text);
+                        label15.Text = text;
                     }
+                    i += 1;
+                }
+                counter++;
+                if(counter < 0)
+                {
+                    await Task.Delay(1000, token);
+                    counter = 0;
+                    StartButton.Enabled = true;
+                    StopButton.Enabled = false;
+                    StartButton.PerformClick();
+                }
+                else if(counter < files.Count)
+                {
+                    labelSetColor();
+                    await Task.Delay(1000, token);
+                    StartButton.Enabled = true;
+                    StopButton.Enabled = false;
+                    StartButton.PerformClick();
+                }
+                else
+                {
+                    labelResetColor();
+                    counter = 0;
+                    StartButton.Enabled = true;
+                    StopButton.Enabled = false;
+                    buttonEnable();
                 }
             }
             catch(Exception ex)
             {
                 //例外を無視
             }
-        }
-        private void ArrayClear()
-        {
-            ompu.Clear();
-            Data.Clear();
-            partsNum = 0;
         }
         private void SerialStop()
         {
@@ -488,10 +610,5 @@ namespace MusicRelay
                 labelArray[i].ForeColor = Color.Black;
             }
         }
-    }
-    public class Onkai
-    {
-        public string Name { get; set; }
-        public int Value { get; set; }
     }
 }
