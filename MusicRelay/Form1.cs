@@ -211,7 +211,7 @@ namespace MusicRelay
                         labelSetColor();
                         FileEncoder();
                         //解読が終了したら、データをシリアル通信でarduinoに送信
-                        SerialDate(_s.Token);
+                        SendSerial(_s.Token);
                     }
                 }
                 catch(Exception ex)
@@ -486,7 +486,7 @@ namespace MusicRelay
             }
         }
         //シリアル送信用メソッド
-        private async void SerialDate(CancellationToken token)
+        private async void SendSerial(CancellationToken token)
         {
             try
             {
@@ -494,6 +494,7 @@ namespace MusicRelay
                 int delay = 0;
                 int[] parts = new int[128];
                 string text = "";
+
                 foreach (NoteData data in noteList)
                 {
                     int tempo = (int)tempoList[0].bpm;
@@ -539,7 +540,6 @@ namespace MusicRelay
                             j = 1;
                             await Task.Delay(delay, token);
                             serialPort1.Write(text);
-                            label15.Text = text;
                             text = "";
                         }
                     }
@@ -547,7 +547,6 @@ namespace MusicRelay
                     {
                         await Task.Delay(delay, token);
                         serialPort1.Write(text);
-                        label15.Text = text;
                     }
                     i += 1;
                 }

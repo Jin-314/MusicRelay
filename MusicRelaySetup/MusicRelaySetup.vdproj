@@ -15,19 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_5BCB2A13C19B4F95AD72C9ED9534DC47"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_6F4716E3C1F66915812E9AE30B885A51"
-        "OwnerKey" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
+        "OwnerKey" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
+        "MsmKey" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -40,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
+        "OwnerKey" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -61,6 +55,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -77,6 +79,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -106,26 +116,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5BCB2A13C19B4F95AD72C9ED9534DC47"
-            {
-            "SourcePath" = "8:..\\MusicRelay\\bin\\Debug\\OnkaiData.txt"
-            "TargetName" = "8:OnkaiData.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_A62E28ADAC094262B95149D060C32974"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6F4716E3C1F66915812E9AE30B885A51"
             {
             "AssemblyRegister" = "3:1"
@@ -345,7 +335,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3BD2D8F0616543AD903034731C9CD601"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2BC63AC8210B4283B34B0FCA468CB547"
             {
             "Name" = "8:MusicRelay"
             "Arguments" = "8:"
@@ -353,13 +343,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
+            "Target" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
             "Folder" = "8:_93976FD8AE934EFFA64939B3A59FA063"
             "WorkingFolder" = "8:_A62E28ADAC094262B95149D060C32974"
-            "Icon" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
+            "Icon" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3D9CF5471AEC42C0820F6C254240A540"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3D5921ABA3BF45A9A2180EDAB631E18A"
             {
             "Name" = "8:MusicRelay"
             "Arguments" = "8:"
@@ -367,24 +357,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
+            "Target" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
             "Folder" = "8:_BDEA88EACF6C40DA8024F630AD244C49"
             "WorkingFolder" = "8:_A62E28ADAC094262B95149D060C32974"
-            "Icon" = "8:_CB8569BE7F564D158924F1A007E4CF1F"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CB760881CA9F464392FF3EAC5B55D6AF"
-            {
-            "Name" = "8:OnkaiData"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_5BCB2A13C19B4F95AD72C9ED9534DC47"
-            "Folder" = "8:_93976FD8AE934EFFA64939B3A59FA063"
-            "WorkingFolder" = "8:_A62E28ADAC094262B95149D060C32974"
-            "Icon" = "8:"
+            "Icon" = "8:_FF5125519B7F4B01A3BDF5BE101FB3DF"
             "Feature" = "8:"
             }
         }
@@ -786,9 +762,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CB8569BE7F564D158924F1A007E4CF1F"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FF5125519B7F4B01A3BDF5BE101FB3DF"
             {
-            "SourcePath" = "8:..\\MusicRelay\\obj\\Debug\\MusicRelay.exe"
+            "SourcePath" = "8:..\\MusicRelay\\obj\\Release\\MusicRelay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A62E28ADAC094262B95149D060C32974"
