@@ -56,12 +56,14 @@ namespace MusicRelay
             public byte[] data;
         };
         //フォームコントロールの配列
+        private int harmony = 0;
+        private int counter = 0;
         private Button[] buttonArray;
         private Label[] labelArray;
         private List<string> files = new List<string>();
-        private List<NoteData> noteList = new List<NoteData>();
+        private List<NoteData> PianoNoteList = new List<NoteData>();
+        private List<NoteData> GuitarNoteList = new List<NoteData>();
         private List<TempoData> tempoList = new List<TempoData>();
-        private int counter = 0;
         private HeaderChunkData headerChunk = new HeaderChunkData();
         private CancellationTokenSource _s = null;
 
@@ -270,7 +272,7 @@ namespace MusicRelay
         //midi解析＆配列格納用メソッド
         private void FileEncoder()
         {
-            noteList.Clear();
+            PianoNoteList.Clear();
             tempoList.Clear();
             //現在の再生位置のファイルパスからファイルをバイナリで開く
             using (FileStream stream = new FileStream(files[counter], FileMode.Open, FileAccess.Read))
@@ -375,7 +377,12 @@ namespace MusicRelay
                                 note.laneIndex = (int)dataByte0;
                                 note.type = NoteType.Off;
 
-                                noteList.Add(note);
+                                if (harmony == 0x00)
+                                {
+                                    PianoNoteList.Add(note);
+                                }else if(harmony == 0x1D || harmony == 0x1E){
+                                    GuitarNoteList.Add(note);
+                                }
                                 longFlags[note.laneIndex] = false;
                             }
                             break;
@@ -397,7 +404,14 @@ namespace MusicRelay
                                         longFlags[note.laneIndex] = false;
                                     }
                                 }
-                                noteList.Add(note);
+                                if (harmony == 0x00)
+                                {
+                                    PianoNoteList.Add(note);
+                                }
+                                else if (harmony == 0x1D || harmony == 0x1E)
+                                {
+                                    GuitarNoteList.Add(note);
+                                }
                             }
                             break;
                         //これ以降はインクリメント用
@@ -427,6 +441,9 @@ namespace MusicRelay
                             }
                             break;
                         case 0xc0:
+                            dataByte0 = data[i++];
+                            harmony = dataByte0;
+                            break;
                         case 0xd0:
                             i += 1;
                             break;
@@ -495,9 +512,9 @@ namespace MusicRelay
                 int[] parts = new int[128];
                 string text = "";
 
-                foreach (NoteData data in noteList)
+                foreach (NoteData data in PianoNoteList)
                 {
-                    int tempo = (int)tempoList[0].bpm;
+                    int tempo = (int)tempoList[1].bpm;
                     //インデックスから周期を計算
                     double freq = 440.0 * (Math.Pow(2.0, ((data.laneIndex - 69) / 12.0)));
                     //マイコンが制御しやすいようにマイクロ秒単位周期に変換
@@ -521,9 +538,9 @@ namespace MusicRelay
                     {
                         delay = (int)((60000 / tempo) * (double)((double)data.eventTime / (double)headerChunk.division));
                     }
-                    if (i < noteList.Count - 1)
+                    if (i < PianoNoteList.Count - 1)
                     {
-                        NoteData nextData = noteList[i + 1];
+                        NoteData nextData = PianoNoteList[i + 1];
                         if (nextData.eventTime == 0)
                         {
                             if(data.type == nextData.type)
@@ -540,6 +557,7 @@ namespace MusicRelay
                             j = 1;
                             await Task.Delay(delay, token);
                             serialPort1.Write(text);
+                            label15.Text = text;
                             text = "";
                         }
                     }
